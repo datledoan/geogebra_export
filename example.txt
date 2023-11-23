@@ -1,0 +1,116 @@
+{
+   "type": "FeatureCollection",
+   "name": "points",
+   "crs": {
+      "type": "name",
+      "properties": {
+         "name": "urn:ogc:def:crs:EPSG::3857"
+      }
+   },
+   "features": [
+      {
+         "type": "Feature",
+         "geometry": {
+            "type": "Point",
+            "coordinates": [
+               -1.23125895,
+               -2.0112970000000026
+            ]
+         },
+         "properties": {
+            "id": 0,
+            "frame": "map"
+         }
+      },
+      {
+         "type": "Feature",
+         "geometry": {
+            "type": "Point",
+            "coordinates": [
+               0.60513555,
+               -1.993114900000002
+            ]
+         },
+
+def main():    
+    data:dict
+    with open(INPUT_GEOJSON_DATA_PATH, "r") as file:
+        data = geojson.load(file)
+    
+    # data_converted = data
+    features_converted = []
+    count_id = 0 
+    for feature in data["features"]:
+        tmp_f = copy.deepcopy(feature)
+        print(f"Old feature: {feature}")
+        if tmp_f["geometry"]["type"] == "Point": #Points
+            tmp_f["geometry"]["coordinates"] =  convertPixelCoordinateToWorldCoordinate(tmp_f["geometry"]["coordinates"])
+            print(f"New feature: {tmp_f}")
+            features_converted.append(tmp_f)
+            count_id +=1
+        elif tmp_f["geometry"]["type"] == "MultiLineString":
+            if len(tmp_f["geometry"]["coordinates"][0]) == 2: #Line
+                tmp_f["properties"]["id"] = count_id
+                tmp_f["geometry"]["coordinates"][0][0] = convertPixelCoordinateToWorldCoordinate(tmp_f["geometry"]["coordinates"][0][0])
+                tmp_f["geometry"]["coordinates"][0][1] = convertPixelCoordinateToWorldCoordinate(tmp_f["geometry"]["coordinates"][0][1])
+                print(f"New feature: {tmp_f}")
+                features_converted.append(tmp_f)
+                count_id +=1
+                if "bidirectional" in tmp_f["properties"]:
+                    if tmp_f["properties"]["bidirectional"]:
+                        tmp_extra_feature = copy.deepcopy(tmp_f)
+                        tmp_extra_feature["properties"]["id"] = count_id
+                        tmp = tmp_extra_feature["properties"]["startid"]
+                        tmp_extra_feature["properties"]["startid"] = tmp_extra_feature["properties"]["endid"]
+                        tmp_extra_feature["properties"]["endid"] = tmp
+                        tmp = tmp_extra_feature["geometry"]["coordinates"][0][0]
+                        tmp_extra_feature["geometry"]["coordinates"][0][0] = tmp_extra_feature["geometry"]["coordinates"][0][1]
+                        tmp_extra_feature["geometry"]["coordinates"][0][1] = tmp
+                        print(f"New feature: {tmp_extra_feature}")
+                        print(f"temp: {tmp_f}")
+                        features_converted.append(tmp_extra_feature)
+                        count_id +=1
+            elif len(tmp_f["geometry"]["coordinates"][0]) == 3: #Circular Arcs
+                tmp_f["properties"]["id"] = count_id
+                tmp_f["geometry"]["coordinates"][0][0] = convertPixelCoordinateToWorldCoordinate(tmp_f["geometry"]["coordinates"][0][0])
+                tmp_f["geometry"]["coordinates"][0][1] = convertPixelCoordinateToWorldCoordinate(tmp_f["geometry"]["coordinates"][0][1])
+                tmp_f["geometry"]["coordinates"][0][2] = convertPixelCoordinateToWorldCoordinate(tmp_f["geometry"]["coordinates"][0][2])
+                print(f"New feature: {tmp_f}")
+                features_converted.append(tmp_f)
+                count_id +=1
+                if "bidirectional" in tmp_f["properties"]:
+                    if tmp_f["properties"]["bidirectional"]:
+                        tmp_extra_feature = copy.deepcopy(tmp_f)
+                        tmp_extra_feature["properties"]["id"] = count_id
+                        tmp = tmp_extra_feature["properties"]["startid"]
+                        tmp_extra_feature["properties"]["startid"] = tmp_extra_feature["properties"]["endid"]
+                        tmp_extra_feature["properties"]["endid"] = tmp
+                        tmp = tmp_extra_feature["geometry"]["coordinates"][0][0]
+                        tmp_extra_feature["geometry"]["coordinates"][0][0] = tmp_extra_feature["geometry"]["coordinates"][0][1]
+                        tmp_extra_feature["geometry"]["coordinates"][0][1] = tmp
+                        print(f"New feature: {tmp_extra_feature}")
+                        features_converted.append(tmp_extra_feature)
+                        count_id +=1                
+    data["features"] = features_converted
+
+    with open(OUTPUT_GEOJSON_DATA_PATH, 'w') as outfile:
+        geojson.dump(data, outfile, indent=3)
+            
+    print(data)
+
+def main():
+    data: list
+    with open(INPUT_FILE, "r") as input_file:
+        data = geojson.load(input_file)
+
+    count = 0
+    with open(OUTPUT_FILE, "a+") as output_file:
+        try:
+            for feature in data["features"]:
+                if feature["geometry"]["type"] == "Point":
+                    if count!= feature["properties"]["id"]:
+                        print(feature)
+                    yaml.dump({count: {'x': feature["geometry"]["coordinates"][0], 'y': feature["geometry"]["coordinates"][1]}}, output_file)
+                    count += 1
+        except yaml.YAMLError as e:
+            print(f"Load {OUTPUT_FILE} error: {e}")
