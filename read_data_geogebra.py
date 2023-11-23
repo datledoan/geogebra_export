@@ -34,6 +34,8 @@ def filter_csv(file_path,result):
 
     feature_list = list_data['Definition'].values[0]
 
+    df['Value'] = df['Value'].str.split('=').str[1]
+
     #search for feature_list in Name column
     #add more type of feature if needed
     filtered_df = df[df['Name'].str.startswith(('Segment', 'Arc', 'Point')) & df['Name'].str.contains('| '.join(feature_list), case=True, na=False)]
