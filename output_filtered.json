@@ -1,0 +1,22 @@
+[
+  {
+    "Name": "Segment f",
+    "Definition": "Segment(A, B)",
+    "Value": "f = 8.2800966177938"
+  },
+  {
+    "Name": "Arc c",
+    "Definition": "CircularArc(B, C, D)",
+    "Value": "c = 11.5923416228487"
+  },
+  {
+    "Name": "Arc d",
+    "Definition": "CircularArc(B, D, C)",
+    "Value": "d = 3.8953776682463"
+  },
+  {
+    "Name": "Segment h",
+    "Definition": "Segment(B, C)",
+    "Value": "h = 2.4599712950484"
+  }
+]
