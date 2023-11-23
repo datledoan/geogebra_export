@@ -24,6 +24,7 @@ def html_table_to_csv(html_filename, csv_filename):
 ###Segment f,"Segment(A, B)",f = 4.48
 ###Arc c,"CircularArc(G, H, I)",c = 6.28
 ###List l1,"{c, d, f, g, h, i, j, k, J}",..
+
 def filter_csv(file_path,result):
     # read csv file
     df = pd.read_csv(file_path)
@@ -34,6 +35,7 @@ def filter_csv(file_path,result):
     feature_list = list_data['Definition'].values[0]
 
     #search for feature_list in Name column
+    #add more type of feature if needed
     filtered_df = df[df['Name'].str.startswith(('Segment', 'Arc', 'Point')) & df['Name'].str.contains('| '.join(feature_list), case=True, na=False)]
 
     print("start")
@@ -44,7 +46,7 @@ def filter_csv(file_path,result):
     filtered_df.to_csv(result, index=False)
 
 
-# Example usage
+
 html_file = 'map1.html'  
 output_csv_file = 'output.csv'
 result_file = 'filtered_feature.csv'
