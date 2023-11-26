@@ -1,51 +1,80 @@
-import pandas as pd
 import json
 import re
 
-# Function to convert HTML table to JSON
-def html_table_to_json(html_filename, json_filename):
-    # Read HTML file into a list of DataFrames
-    tables = pd.read_html(html_filename)
+def convert_to_feature(point_data):
+    name = point_data.get('Name', '')
+    value = point_data.get('Value', '')
+    id_counter = point_data.get('id', 0)
 
-    if not tables:
-        print("No tables found in the HTML file.")
-        return
+    if name.startswith("Point"):
+        # Lấy giá trị từ trường "Value"
+        coordinates = [float(coord) for coord in re.findall(r'-?\d+\.\d+', value)]
 
-    # Assuming the first table is the target table
-    target_table = tables[0]
+        # Tạo cấu trúc mới
+        feature = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": coordinates
+            },
+            "properties": {
+                "id": id_counter,
+                "frame": "map"
+            }
+        }
+        return feature
+    elif name.startswith("Segment"):
+        # Lấycoordinates giá trị từ trường "Value"
+        length = [float(coord) for coord in re.findall(r'-?\d+\.\d+', value)]
+        start_id = point_data.get('startid', 0)
+        end_id = point_data.get('endid', 0)
+        # Tạo cấu trúc mới
+        feature = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Segment",
+                "length": length
+            },
+            "properties": {
+                "id": id_counter,
+                "frame": "map",
+                "startid": start_id,
+                "endid": end_id
+            }
+        }
+    elif name.startswith("Arc"):
+        length = [float(coord) for coord in re.findall(r'-?\d+\.\d+', value)]
+        start_id = point_data.get('startid', 0)
+        end_id = point_data.get('endid', 0)
+        # Tạo cấu trúc mới
+        feature = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Arc",
+                "length": length
+            },
+            "properties": {
+                "id": id_counter,
+                "frame": "map",
+                "startid": start_id,
+                "endid": end_id
+            }
+        }
+        return feature
+    return None
 
-    # Save the table to a JSON file
-    target_table.to_json(json_filename, orient='records', lines=False)
+# Đọc từ tệp JSON
+with open('filtered_feature.json', 'r') as json_file:
+    original_data = json.load(json_file)
 
+# Chuyển đổi dữ liệu
+features = []
 
-def filter(output_json_file):
-    # Đọc từ tệp JSON
-    with open(output_json_file, 'r') as json_file:
-        json_data = json.load(json_file)
+for data_point in original_data:
+    feature = convert_to_feature(data_point)
+    if feature:
+        features.append(feature)
 
-    # Tìm giá trị từ trường "Definition" của các hàng có "Name" chứa "List"
-    list_values = []
-    for row in json_data:
-        if 'List' in row.get('Name', ''):
-            definition_values = re.findall(r'\b\w\b', row.get('Definition', ''))
-            list_values.extend(definition_values)
-    
-
-    
-    # Biểu thức chính quy để kiểm tra "Name"
-    name_pattern = re.compile(r'(Segment|Arc|Point)\s+([a-zA-Z])', re.IGNORECASE)
-
-    # Lọc và in ra các dòng thỏa mãn điều kiện
-    filtered_rows = [row for row in json_data if name_pattern.search(row.get('Name', '')) and name_pattern.search(row.get('Name', '')).group(2) in list_values]
-
-    print("result")
-    # In ra kết quả
-    for row in filtered_rows:
-        print(row)
-
-# Example usage
-html_file = 'map1.html'  # Replace with the path to your HTML file
-output_json_file = 'output.json'
-
-html_table_to_json(html_file, output_json_file)
-filter(output_json_file)
+# Ghi ra tệp JSON mới
+with open('path_to_your_output_json_file.json', 'w') as output_json_file:
+    json.dump(features, output_json_file, indent=2)
