@@ -1,0 +1,50 @@
+[
+  {
+    "Name": "Point A",
+    "Definition": null,
+    "Value": "A = (-6.28, 7.22)",
+    "id": 1
+  },
+  {
+    "Name": "Point B",
+    "Definition": null,
+    "Value": "B = (2, 7.18)",
+    "id": 2
+  },
+  {
+    "Name": "Segment f",
+    "Definition": "Segment(A, B)",
+    "Value": "f = 8.2800966177938",
+    "id": 3,
+    "startid": 1,
+    "endid": 2
+  },
+  {
+    "Name": "Point C",
+    "Definition": "Point(g)",
+    "Value": "C = (1.9881162193699, 4.7200574095683)",
+    "id": 4
+  },
+  {
+    "Name": "Point D",
+    "Definition": "Point(f)",
+    "Value": "D = (-0.4798455075846, 7.1919799299883)",
+    "id": 5
+  },
+  {
+    "Name": "Arc d",
+    "Definition": "CircularArc(B, D, C)",
+    "Value": "d = 3.8953776682463",
+    "id": 6,
+    "startid": 5,
+    "endid": 4
+  },
+  {
+    "Name": "Segment h",
+    "Definition": "Segment(B, C)",
+    "Value": "h = 2.4599712950484",
+    "id": 7,
+    "startid": 2,
+    "endid": 4
+  }
+]
