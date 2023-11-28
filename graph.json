@@ -4,12 +4,12 @@
     "geometry": {
       "type": "Point",
       "coordinates": [
-        -321.488,
-        348.112
+        39.6,
+        -321.488
       ]
     },
     "properties": {
-      "id": 2,
+      "id": 1,
       "frame": "map"
     }
   },
@@ -23,8 +23,21 @@
       ]
     },
     "properties": {
-      "id": 3,
+      "id": 2,
       "frame": "map"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "type": "Segment",
+      "length": 410.6927922425725
+    },
+    "properties": {
+      "id": 3,
+      "frame": "map",
+      "startid": 1,
+      "endid": 2
     }
   },
   {
@@ -37,7 +50,7 @@
       ]
     },
     "properties": {
-      "id": 5,
+      "id": 4,
       "frame": "map"
     }
   },
@@ -51,7 +64,7 @@
       ]
     },
     "properties": {
-      "id": 6,
+      "id": 5,
       "frame": "map"
     }
   },
@@ -64,9 +77,23 @@
       ]
     },
     "properties": {
-      "id": 7,
+      "id": 6,
       "frame": "map",
       "startid": 5,
+      "endid": 4,
+      "originid": 2
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {
+      "type": "Segment",
+      "length": 122.01457623440064
+    },
+    "properties": {
+      "id": 7,
+      "frame": "map",
+      "startid": 2,
       "endid": 4
     }
   }

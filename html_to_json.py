@@ -34,11 +34,11 @@ def filter(output_json_file,output_filtered_json):
     
 
     
-    # Check if the name of the row contains "Segment", "Arc" or "Point"
-    name_pattern = re.compile(r'(Segment|Arc|Point)\s+([a-zA-Z])', re.IGNORECASE)
+    # Check if the name of the row contains "Segment", "Arc"
+    name_pattern = re.compile(r'(Segment|Arc)\s+([a-zA-Z])', re.IGNORECASE)
 
-    # Filter the rows with the name containing "Segment", "Arc" or "Point" and the value in "Definition" field is in the list_values
-    filtered_rows = [row for row in json_data if name_pattern.search(row.get('Name', '')) and name_pattern.search(row.get('Name', '')).group(2) in list_values]
+    # Filter the rows with the name containing "Segment", "Arc" and the value in "Definition" field is in the list_values
+    filtered_rows = [row for row in json_data if name_pattern.search(row.get('Name', '')) and name_pattern.search(row.get('Name', '')).group(2) in list_values or 'Point' in row.get('Name', '')]
 
     for i, item in enumerate(filtered_rows):
         item['id'] = i + 1 
@@ -70,15 +70,15 @@ def add_start_end_ids(output_filtered_json):
         
         if item['Name'].startswith('Arc'):
             # search for start_id and end_id
-            origin_name,start_name, end_name = item['Definition'].replace('Arc(', '').replace(')', '').split(', ')
+            origin_name,start_name, end_name = item['Definition'].replace('CircularArc(', '').replace(')', '').split(', ')
             start_id = name_to_id['Point ' + start_name]
             end_id = name_to_id['Point ' + end_name]
-            #origin_id = name_to_id['Point ' + origin_name]
+            origin_id = name_to_id['Point ' + origin_name]
 
             
             item['startid'] = start_id
             item['endid'] = end_id
-            #item['originid'] = origin_id
+            item['originid'] = origin_id
 
     
     with open(output_filtered_json, 'w') as json_file:
@@ -109,21 +109,22 @@ def read_yaml(yaml_file_path):
 def convert_to_feature(point_data, origin, ratio):
     name = point_data.get('Name', '')
     value = point_data.get('Value', '')
-    id_counter = point_data.get('id', 0) + 1
+    id_counter = point_data.get('id', 0) 
     
 
 
     #Point
     if name.startswith("Point"):
         
-        coordinates = [float(coord) for coord in re.findall(r'-?\d+(?:\.\d+)?', value)]
-
-        if len(coordinates) == 2:
-            x_coordinate, y_coordinate = coordinates
+        coordinates = re.findall(r'-?\d+(?:\.\d+)?', value)
+        x=0
+        y=0
+        if len(coordinates) >= 2:
+            x_coordinate, y_coordinate = map(float, coordinates[:2])
             x = float(x_coordinate) / ratio + origin[0]
             y = float(y_coordinate) / ratio + origin[1]
         else:
-            print("Error: Point coordinates must be 2D")
+            print("Error: Point coordinates must be 2D, coordinates will be set to (0,0)")
         #print(x,y)
         #print(f"{name}: ({x_coordinate}, {y_coordinate})")
         
@@ -162,12 +163,13 @@ def convert_to_feature(point_data, origin, ratio):
                 "endid": end_id
             }
         }
+        return feature
     #Circlearc
     elif name.startswith("Arc"):
         length = [float(coord) for coord in re.findall(r'-?\d+(?:\.\d+)?', value)]
         start_id = point_data.get('startid', 0)
         end_id = point_data.get('endid', 0)
-        #origin_id = point_data.get('originid',0)
+        origin_id = point_data.get('originid',0)
         feature = {
             "type": "Feature",
             "geometry": {
@@ -179,7 +181,7 @@ def convert_to_feature(point_data, origin, ratio):
                 "frame": "map",
                 "startid": start_id,
                 "endid": end_id,
-                #"originid": origin_id
+                "originid": origin_id
             }
         }
         return feature
