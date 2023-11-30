@@ -1,80 +1,39 @@
-import json
-import re
+import numpy as np
+import matplotlib.pyplot as plt
 
-def convert_to_feature(point_data):
-    name = point_data.get('Name', '')
-    value = point_data.get('Value', '')
-    id_counter = point_data.get('id', 0)
+def reflect_over_line(points, m, c):
+    reflected_points = []
+    for x, y in points:
+        x_reflected = (x + (y - c) * m) / (1 + m**2)
+        y_reflected = m * x_reflected + c
+        reflected_points.append((x_reflected, y_reflected))
+    return reflected_points
 
-    if name.startswith("Point"):
-        # Lấy giá trị từ trường "Value"
-        coordinates = [float(coord) for coord in re.findall(r'-?\d+\.\d+', value)]
+# Định nghĩa phương trình đường thẳng: y = mx + c
+m = 0.5  # Hệ số góc
+c = 2    # Hệ số giao điểm với trục y
 
-        # Tạo cấu trúc mới
-        feature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": coordinates
-            },
-            "properties": {
-                "id": id_counter,
-                "frame": "map"
-            }
-        }
-        return feature
-    elif name.startswith("Segment"):
-        # Lấycoordinates giá trị từ trường "Value"
-        length = [float(coord) for coord in re.findall(r'-?\d+\.\d+', value)]
-        start_id = point_data.get('startid', 0)
-        end_id = point_data.get('endid', 0)
-        # Tạo cấu trúc mới
-        feature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Segment",
-                "length": length
-            },
-            "properties": {
-                "id": id_counter,
-                "frame": "map",
-                "startid": start_id,
-                "endid": end_id
-            }
-        }
-    elif name.startswith("Arc"):
-        length = [float(coord) for coord in re.findall(r'-?\d+\.\d+', value)]
-        start_id = point_data.get('startid', 0)
-        end_id = point_data.get('endid', 0)
-        # Tạo cấu trúc mới
-        feature = {
-            "type": "Feature",
-            "geometry": {
-                "type": "Arc",
-                "length": length
-            },
-            "properties": {
-                "id": id_counter,
-                "frame": "map",
-                "startid": start_id,
-                "endid": end_id
-            }
-        }
-        return feature
-    return None
+# Tạo một dãy điểm
+original_points = np.array([(1, 2), (2, 3), (3, 4), (4, 5)])
 
-# Đọc từ tệp JSON
-with open('filtered_feature.json', 'r') as json_file:
-    original_data = json.load(json_file)
+# Lấy đối xứng các điểm qua đường thẳng
+reflected_points = reflect_over_line(original_points, m, c)
 
-# Chuyển đổi dữ liệu
-features = []
+# Vẽ đồ thị
+original_points = np.array(original_points).T
+reflected_points = np.array(reflected_points).T
 
-for data_point in original_data:
-    feature = convert_to_feature(data_point)
-    if feature:
-        features.append(feature)
+plt.scatter(original_points[0], original_points[1], label='Original Points')
+plt.scatter(reflected_points[0], reflected_points[1], label='Reflected Points')
 
-# Ghi ra tệp JSON mới
-with open('path_to_your_output_json_file.json', 'w') as output_json_file:
-    json.dump(features, output_json_file, indent=2)
+# Vẽ đường thẳng
+x_values = np.linspace(min(original_points[0]), max(original_points[0]), 100)
+y_values = m * x_values + c
+plt.plot(x_values, y_values, label='Line: y = {}x + {}'.format(m, c), linestyle='--')
+
+plt.title('Đối xứng qua đường thẳng')
+plt.xlabel('X-axis')
+plt.ylabel('Y-axis')
+plt.legend()
+plt.grid(True)
+plt.show()
