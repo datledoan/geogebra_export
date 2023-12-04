@@ -32,10 +32,11 @@ def filter(output_json_file,output_filtered_json):
             definition_values = re.findall(r'\b\w\b', row.get('Definition', ''))
             list_values.extend(definition_values)
     
+    print(list_values)
 
     
     # Check if the name of the row contains "Segment", "Arc"
-    name_pattern = re.compile(r'(Segment|Arc)\s+([a-zA-Z])', re.IGNORECASE)
+    name_pattern = re.compile(r'(Segment|Arc)\s+([a-zA-Z0-9_]+)', re.IGNORECASE)
 
     # Filter the rows with the name containing "Segment", "Arc" and the value in "Definition" field is in the list_values
     filtered_rows = [row for row in json_data if name_pattern.search(row.get('Name', '')) and name_pattern.search(row.get('Name', '')).group(2) in list_values or 'Point' in row.get('Name', '')]
@@ -104,6 +105,7 @@ def read_yaml(yaml_file_path):
         origin = data.get('origin')
     return resolution, origin
 
+id_use = []
 
 # Format data to GeoJSON
 def convert_to_feature(point_data, origin, ratio):
@@ -150,6 +152,10 @@ def convert_to_feature(point_data, origin, ratio):
         start_id = point_data.get('startid', 0)
         end_id = point_data.get('endid', 0)
 
+        id_use.append(start_id)
+        id_use.append(end_id)
+        id_use.append(id_counter)
+
         feature = {
             "type": "Feature",
             "geometry": {
@@ -170,6 +176,11 @@ def convert_to_feature(point_data, origin, ratio):
         start_id = point_data.get('startid', 0)
         end_id = point_data.get('endid', 0)
         origin_id = point_data.get('originid',0)
+
+        id_use.append(start_id)
+        id_use.append(end_id)
+        id_use.append(id_counter)
+
         feature = {
             "type": "Feature",
             "geometry": {
@@ -214,15 +225,20 @@ def graph_json(output_filtered_json,graph_file_path, pgm_file_path, yaml_file_pa
         if feature:
             features.append(feature)
 
+    filtered_features = []
+    for feature in features:
+        if feature['properties']['id'] in id_use:
+            filtered_features.append(feature)
+
     # Write graph to json file
     with open(graph_file_path, 'w') as output_json_file:
-        json.dump(features, output_json_file, indent=2)
+        json.dump(filtered_features, output_json_file, indent=2)
 
 
 if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description='Convert HTML table to graph in JSON')
-    parser.add_argument('--html_file', type=str, default='map1.html', help='Path to the HTML file')
+    parser.add_argument('--html_file', type=str, default='test.html', help='Path to the HTML file')
     parser.add_argument('--graph_file_path', type=str, default='graph.json', help='Path to the graph JSON file')
     parser.add_argument('--delete_unnecessary_files', type=bool, default=False, help='Delete unnecessary files')
     parser.add_argument('--pgm_file_path', type=str, default='map.pgm', help='Path to the pgm file')
