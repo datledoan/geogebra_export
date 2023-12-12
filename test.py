@@ -2,67 +2,67 @@ import json
 
 # Dữ liệu ban đầu
 data = [
-    {
-        "Name": "Arc c",
-        "Definition": "fillet13(D, B, E)",
-        "Value": "c = 0.9024890814",
-        "id": 10
-    },
-    {
-        "Name": "Point F",
-        "Definition": "fillet13(D, B, E)",
-        "Value": "F = (5.5, 7.5745423936)",
-        "id": 11
-    },
-    {
-        "Name": "Point G",
-        "Definition": "fillet13(D, B, E)",
-        "Value": "G = (6.0745423936, 7)",
-        "id": 12
-    },
-    {
-        "Name": "Point H",
-        "Definition": "fillet13(D, B, E)",
-        "Value": "H = (6.0745423936, 7.5745423936)",
-        "id": 13
-    },
-    {
-        "Name": "Arc v",
-        "Definition": "fillet13(V, W, Z)",
-        "Value": "v = 1.23456789",
-        "id": 14
-    },
-    {
-        "Name": "Point W",
-        "Definition": "fillet13(V, W, Z)",
-        "Value": "W = (3.0, 4.0)",
-        "id": 15
-    },
-    {
-        "Name": "Point X",
-        "Definition": "fillet13(V, W, Z)",
-        "Value": "X = (2.5, 4.5)",
-        "id": 16
-    },
-    {
-        "Name": "Point Y",
-        "Definition": "fillet13(V, W, Z)",
-        "Value": "Y = (3.5, 5.5)",
-        "id": 17
-    }
+  {
+    "Name": "Point P",
+    "Definition": "fillet(D, F, E)",
+    "Value": "P = (13.3, 9.1)",
+    "id": 34
+  },
+  {
+    "Name": "Point Q",
+    "Definition": "fillet(D, F, E)",
+    "Value": "Q = (15.23, 9.11)",
+    "id": 35
+  },
+  {
+    "Name": "Point R",
+    "Definition": "fillet(D, F, E)",
+    "Value": "R = (13.29, 11.04)",
+    "id": 36
+  },
+  {
+    "Name": "Arc c1",
+    "Definition": "fillet(D, F, E)",
+    "Value": "c1 = 3.05",
+    "id": 37
+  },
+  {
+    "Name": "Segment b",
+    "Definition": "fillet(D, F, E)",
+    "Value": "b = 3.53",
+    "id": 38
+  },
+  {
+    "Name": "Segment f1",
+    "Definition": "fillet(D, F, E)",
+    "Value": "f1 = 1.94",
+    "id": 39
+  },
+  {
+    "Name": "Segment g1",
+    "Definition": "fillet(D, F, E)",
+    "Value": "g1 = 1.94",
+    "id": 40
+  },
+  {
+    "Name": "Segment h1",
+    "Definition": "fillet(D, F, E)",
+    "Value": "h1 = 5.31",
+    "id": 41
+  }
 ]
 
 # Tìm các điểm có "Definition" là "fillet13(D, B, E)" hoặc "fillet13(V, W, Z)"
-arc_data = [item for item in data if "fillet13" in item.get("Definition")]
+arc_data = [item for item in data if "fillet" in item.get("Definition")]
 print(arc_data)
 # Tạo định dạng mới
 features = []
 for arc in arc_data:
     if "Arc" in arc.get("Name"):
       print(arc.get("id"))
-      start_point = next(item for item in arc_data if item.get("id") == arc.get("id") + 1)
-      end_point = next(item for item in arc_data if item.get("id") == arc.get("id") + 2)
-      origin_point = next(item for item in arc_data if item.get("id") == arc.get("id") + 3)
+      start_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 2)
+      end_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 3)
+      origin_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 1)
 
       feature = {
           "type": "Feature",
