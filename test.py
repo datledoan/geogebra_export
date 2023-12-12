@@ -1,39 +1,94 @@
-import numpy as np
-import matplotlib.pyplot as plt
+import json
 
-def reflect_over_line(points, m, c):
-    reflected_points = []
-    for x, y in points:
-        x_reflected = (x + (y - c) * m) / (1 + m**2)
-        y_reflected = m * x_reflected + c
-        reflected_points.append((x_reflected, y_reflected))
-    return reflected_points
+# Dữ liệu ban đầu
+data = [
+    {
+        "Name": "Arc c",
+        "Definition": "fillet13(D, B, E)",
+        "Value": "c = 0.9024890814",
+        "id": 10
+    },
+    {
+        "Name": "Point F",
+        "Definition": "fillet13(D, B, E)",
+        "Value": "F = (5.5, 7.5745423936)",
+        "id": 11
+    },
+    {
+        "Name": "Point G",
+        "Definition": "fillet13(D, B, E)",
+        "Value": "G = (6.0745423936, 7)",
+        "id": 12
+    },
+    {
+        "Name": "Point H",
+        "Definition": "fillet13(D, B, E)",
+        "Value": "H = (6.0745423936, 7.5745423936)",
+        "id": 13
+    },
+    {
+        "Name": "Arc v",
+        "Definition": "fillet13(V, W, Z)",
+        "Value": "v = 1.23456789",
+        "id": 14
+    },
+    {
+        "Name": "Point W",
+        "Definition": "fillet13(V, W, Z)",
+        "Value": "W = (3.0, 4.0)",
+        "id": 15
+    },
+    {
+        "Name": "Point X",
+        "Definition": "fillet13(V, W, Z)",
+        "Value": "X = (2.5, 4.5)",
+        "id": 16
+    },
+    {
+        "Name": "Point Y",
+        "Definition": "fillet13(V, W, Z)",
+        "Value": "Y = (3.5, 5.5)",
+        "id": 17
+    }
+]
 
-# Định nghĩa phương trình đường thẳng: y = mx + c
-m = 0.5  # Hệ số góc
-c = 2    # Hệ số giao điểm với trục y
+# Tìm các điểm có "Definition" là "fillet13(D, B, E)" hoặc "fillet13(V, W, Z)"
+arc_data = [item for item in data if "fillet13" in item.get("Definition")]
+print(arc_data)
+# Tạo định dạng mới
+features = []
+for arc in arc_data:
+    if "Arc" in arc.get("Name"):
+      print(arc.get("id"))
+      start_point = next(item for item in arc_data if item.get("id") == arc.get("id") + 1)
+      end_point = next(item for item in arc_data if item.get("id") == arc.get("id") + 2)
+      origin_point = next(item for item in arc_data if item.get("id") == arc.get("id") + 3)
 
-# Tạo một dãy điểm
-original_points = np.array([(1, 2), (2, 3), (3, 4), (4, 5)])
+      feature = {
+          "type": "Feature",
+          "geometry": {
+              "type": "Arc"
+          },
+          "properties": {
+              "id": arc["id"],
+              "startid": start_point["id"],
+              "endid": end_point["id"],
+              "originid": origin_point["id"],
+              "frame": "map"
+          }
+    }
 
-# Lấy đối xứng các điểm qua đường thẳng
-reflected_points = reflect_over_line(original_points, m, c)
+    features.append(feature)
 
-# Vẽ đồ thị
-original_points = np.array(original_points).T
-reflected_points = np.array(reflected_points).T
+# Xuất ra file JSON mới
+output_data = {
+    "type": "FeatureCollection",
+    "features": features
+}
 
-plt.scatter(original_points[0], original_points[1], label='Original Points')
-plt.scatter(reflected_points[0], reflected_points[1], label='Reflected Points')
+print(features)
 
-# Vẽ đường thẳng
-x_values = np.linspace(min(original_points[0]), max(original_points[0]), 100)
-y_values = m * x_values + c
-plt.plot(x_values, y_values, label='Line: y = {}x + {}'.format(m, c), linestyle='--')
+# with open("output.json", "w") as outfile:
+#     json.dump(output_data, outfile, indent=2)
 
-plt.title('Đối xứng qua đường thẳng')
-plt.xlabel('X-axis')
-plt.ylabel('Y-axis')
-plt.legend()
-plt.grid(True)
-plt.show()
+print("Chuyển đổi hoàn tất. Dữ liệu được xuất ra file 'output.json'")
