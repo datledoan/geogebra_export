@@ -1,8 +1,248 @@
 [
-    {
-      "Name": "Point A",
-      "Definition": null,
-      "Value": "A = (-6.28, 7.22)",
-      "id": 1
-    }
+  {
+    "Name": "Point A",
+    "Definition": null,
+    "Value": "A = (7.94, 15.71)",
+    "id": 1
+  },
+  {
+    "Name": "Point B",
+    "Definition": null,
+    "Value": "B = (8.01, 5.51)",
+    "id": 2
+  },
+  {
+    "Name": "Segment f",
+    "Definition": "Segment(A, B)",
+    "Value": "f = 10.21",
+    "id": 3
+  },
+  {
+    "Name": "Point C",
+    "Definition": null,
+    "Value": "C = (15.21, 15.81)",
+    "id": 4
+  },
+  {
+    "Name": "Point D",
+    "Definition": null,
+    "Value": "D = (15.25, 5.58)",
+    "id": 5
+  },
+  {
+    "Name": "Segment g",
+    "Definition": "Segment(C, D)",
+    "Value": "g = 10.23",
+    "id": 6
+  },
+  {
+    "Name": "Point E",
+    "Definition": "Point(f)",
+    "Value": "E = (7.98, 11)",
+    "id": 7
+  },
+  {
+    "Name": "Point F",
+    "Definition": "Point(g)",
+    "Value": "F = (15.23, 11.05)",
+    "id": 8
+  },
+  {
+    "Name": "Segment h",
+    "Definition": "Segment(E, F)",
+    "Value": "h = 7.25",
+    "id": 9
+  },
+  {
+    "Name": "Point G",
+    "Definition": "fillet(A, E, F)",
+    "Value": "G = (9.64, 12.69)",
+    "id": 10
+  },
+  {
+    "Name": "Point H",
+    "Definition": "fillet(A, E, F)",
+    "Value": "H = (7.96, 12.67)",
+    "id": 11
+  },
+  {
+    "Name": "Point I",
+    "Definition": "fillet(A, E, F)",
+    "Value": "I = (9.65, 11.01)",
+    "id": 12
+  },
+  {
+    "Name": "Arc c",
+    "Definition": "fillet(A, E, F)",
+    "Value": "c = 2.63",
+    "id": 13
+  },
+  {
+    "Name": "Segment i",
+    "Definition": "fillet(A, E, F)",
+    "Value": "i = 3.04",
+    "id": 14
+  },
+  {
+    "Name": "Segment j",
+    "Definition": "fillet(A, E, F)",
+    "Value": "j = 1.67",
+    "id": 15
+  },
+  {
+    "Name": "Segment k",
+    "Definition": "fillet(A, E, F)",
+    "Value": "k = 1.67",
+    "id": 16
+  },
+  {
+    "Name": "Segment l",
+    "Definition": "fillet(A, E, F)",
+    "Value": "l = 5.58",
+    "id": 17
+  },
+  {
+    "Name": "Point J",
+    "Definition": "fillet(C, F, E)",
+    "Value": "J = (13.53, 12.73)",
+    "id": 18
+  },
+  {
+    "Name": "Point K",
+    "Definition": "fillet(C, F, E)",
+    "Value": "K = (15.22, 12.74)",
+    "id": 19
+  },
+  {
+    "Name": "Point L",
+    "Definition": "fillet(C, F, E)",
+    "Value": "L = (13.54, 11.04)",
+    "id": 20
+  },
+  {
+    "Name": "Arc d",
+    "Definition": "fillet(C, F, E)",
+    "Value": "d = 2.66",
+    "id": 21
+  },
+  {
+    "Name": "Segment m",
+    "Definition": "fillet(C, F, E)",
+    "Value": "m = 3.07",
+    "id": 22
+  },
+  {
+    "Name": "Segment n",
+    "Definition": "fillet(C, F, E)",
+    "Value": "n = 1.69",
+    "id": 23
+  },
+  {
+    "Name": "Segment p",
+    "Definition": "fillet(C, F, E)",
+    "Value": "p = 1.69",
+    "id": 24
+  },
+  {
+    "Name": "Segment q",
+    "Definition": "fillet(C, F, E)",
+    "Value": "q = 5.56",
+    "id": 25
+  },
+  {
+    "Name": "Point M",
+    "Definition": "fillet(B, E, F)",
+    "Value": "M = (9.94, 9.06)",
+    "id": 26
+  },
+  {
+    "Name": "Point N",
+    "Definition": "fillet(B, E, F)",
+    "Value": "N = (7.99, 9.05)",
+    "id": 27
+  },
+  {
+    "Name": "Point O",
+    "Definition": "fillet(B, E, F)",
+    "Value": "O = (9.93, 11.01)",
+    "id": 28
+  },
+  {
+    "Name": "Arc e",
+    "Definition": "fillet(B, E, F)",
+    "Value": "e = 3.06",
+    "id": 29
+  },
+  {
+    "Name": "Segment r",
+    "Definition": "fillet(B, E, F)",
+    "Value": "r = 3.54",
+    "id": 30
+  },
+  {
+    "Name": "Segment s",
+    "Definition": "fillet(B, E, F)",
+    "Value": "s = 1.95",
+    "id": 31
+  },
+  {
+    "Name": "Segment t",
+    "Definition": "fillet(B, E, F)",
+    "Value": "t = 1.95",
+    "id": 32
+  },
+  {
+    "Name": "Segment a",
+    "Definition": "fillet(B, E, F)",
+    "Value": "a = 5.3",
+    "id": 33
+  },
+  {
+    "Name": "Point P",
+    "Definition": "fillet(D, F, E)",
+    "Value": "P = (13.3, 9.1)",
+    "id": 34
+  },
+  {
+    "Name": "Point Q",
+    "Definition": "fillet(D, F, E)",
+    "Value": "Q = (15.23, 9.11)",
+    "id": 35
+  },
+  {
+    "Name": "Point R",
+    "Definition": "fillet(D, F, E)",
+    "Value": "R = (13.29, 11.04)",
+    "id": 36
+  },
+  {
+    "Name": "Arc c1",
+    "Definition": "fillet(D, F, E)",
+    "Value": "c1 = 3.05",
+    "id": 37
+  },
+  {
+    "Name": "Segment b",
+    "Definition": "fillet(D, F, E)",
+    "Value": "b = 3.53",
+    "id": 38
+  },
+  {
+    "Name": "Segment f1",
+    "Definition": "fillet(D, F, E)",
+    "Value": "f1 = 1.94",
+    "id": 39
+  },
+  {
+    "Name": "Segment g1",
+    "Definition": "fillet(D, F, E)",
+    "Value": "g1 = 1.94",
+    "id": 40
+  },
+  {
+    "Name": "Segment h1",
+    "Definition": "fillet(D, F, E)",
+    "Value": "h1 = 5.31",
+    "id": 41
+  }
 ]
