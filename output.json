@@ -1,1 +1,80 @@
-[{"Name":"Point A","Definition":null,"Value":"A = (-6, 5.15)"},{"Name":"Point B1(-4.1, 4.65)","Definition":null,"Value":"B1 = (-4.1, 4.65)"},{"Name":"Point C","Definition":null,"Value":"C = (-3.76, 3.23)"},{"Name":"Point D","Definition":null,"Value":"D = (-5.56, 3.21)"},{"Name":"Point E","Definition":null,"Value":"E = (-3.3, 3.71)"},{"Name":"Point F","Definition":null,"Value":"F = (-2.7, 4.99)"},{"Name":"Point G","Definition":null,"Value":"G = (-2.38, 3.43)"},{"Name":"Point H","Definition":null,"Value":"H = (-3.06, 2.21)"},{"Name":"Line f","Definition":"Line(A, B1)","Value":"f: 0.5x + 1.9y = 6.785"},{"Name":"Line f2","Definition":"Line(B1, D)","Value":"f2: 1.44x - 1.46y = -12.693"},{"Name":"Point B","Definition":null,"Value":"B = (-3.46, 1.55)"},{"Name":"Arc f5","Definition":"CircularArc(C, G, B)","Value":"f5 = 6.6167511375"},{"Name":"Segment f3","Definition":"Segment(G, H)","Value":"f3 = 1.396710421"},{"Name":"Segment f4","Definition":"Segment(H, C)","Value":"f4 = 1.2370933675"},{"Name":"List l1","Definition":"{f5, f3, f4, A, B1, D, E, F}","Value":"l1 = {6.6167511375, 1.396710421, 1.2370933675, (-6, 5.15), (-4.1, 4.65), (-5.56, 3.21), (-3.3, 3.71), (-2.7, 4.99)}"}]
+[
+  {
+    "Name": "Point A",
+    "Definition": null,
+    "Value": "A = (5.5, 9)",
+    "id": 1
+  },
+  {
+    "Name": "Point B",
+    "Definition": null,
+    "Value": "B = (5.5, 7)",
+    "id": 2
+  },
+  {
+    "Name": "Segment f",
+    "Definition": "Segment(A, B)",
+    "Value": "f = 2",
+    "id": 3
+  },
+  {
+    "Name": "Point C",
+    "Definition": null,
+    "Value": "C = (8.5, 7)",
+    "id": 4
+  },
+  {
+    "Name": "Segment g",
+    "Definition": "Segment(B, C)",
+    "Value": "g = 3",
+    "id": 5
+  },
+  {
+    "Name": "Point D",
+    "Definition": "Point(f)",
+    "Value": "D = (5.5, 7.6704464065)",
+    "id": 6
+  },
+  {
+    "Name": "Point E",
+    "Definition": "Point(g)",
+    "Value": "E = (6.2883700588, 7)",
+    "id": 7
+  },
+  {
+    "Name": "Segment h",
+    "Definition": "fillet13(D, B, E)",
+    "Value": "h = 0.095904013",
+    "id": 8
+  },
+  {
+    "Name": "Segment i",
+    "Definition": "fillet13(D, B, E)",
+    "Value": "i = 0.2138276652",
+    "id": 9
+  },
+  {
+    "Name": "Arc c",
+    "Definition": "fillet13(D, B, E)",
+    "Value": "c = 0.9024890814",
+    "id": 10
+  },
+  {
+    "Name": "Point F",
+    "Definition": "fillet13(D, B, E)",
+    "Value": "F = (5.5, 7.5745423936)",
+    "id": 11
+  },
+  {
+    "Name": "Point G",
+    "Definition": "fillet13(D, B, E)",
+    "Value": "G = (6.0745423936, 7)",
+    "id": 12
+  },
+  {
+    "Name": "Point H",
+    "Definition": "fillet13(D, B, E)",
+    "Value": "H = (6.0745423936, 7.5745423936)",
+    "id": 13
+  }
+]

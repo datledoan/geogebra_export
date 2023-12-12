@@ -261,3 +261,5 @@ if __name__ == '__main__':
     if args.delete_unnecessary_files:
         os.remove(output_json_file)
         os.remove(output_filtered_json)
+
+ 
