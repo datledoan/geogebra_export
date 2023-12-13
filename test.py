@@ -38,11 +38,22 @@ def process_data(data):
 
     for arc in arc_data:
       if arc.get("Name").startswith("Arc"):
-        start_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 1)
-        end_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 2)
-        origin_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 3)
 
-        feature = {
+        start_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 2)
+        end_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 1)
+        origin_point = next(item for item in arc_data if item.get("id") == arc.get("id") - 3)
+        
+        first_name, second_name, third_name = item['Definition'].replace('fillet(', '').replace(')', '').split(', ')
+        first_id = name_to_id['Point ' + first_name]
+        second_id = name_to_id['Point ' + second_name]
+        third_id = name_to_id['Point ' + third_name]
+
+        segment_1 = next(item for item in arc_data if item.get("id") == arc.get("id") + 1)
+        segment_2 = next(item for item in arc_data if item.get("id") == arc.get("id") + 2)    
+        segment_3 = next(item for item in arc_data if item.get("id") == arc.get("id") + 3)
+        segment_4 = next(item for item in arc_data if item.get("id") == arc.get("id") + 4)
+
+        feature_arc = {
             "type": "Feature",
             "geometry": {
                 "type": "Arc"
@@ -56,7 +67,69 @@ def process_data(data):
             }
         }
 
-        features.append(feature)
+        features.append(feature_arc)
+
+        feature_segment_1 = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Segment"
+            },
+            "properties": {
+                "id": segment_1["id"],
+                "startid": first_id,
+                "endid": start_point["id"],
+                "frame": "map"
+            }
+        }
+
+        features.append(feature_segment_1)
+
+        feature_segment_2 = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Segment"
+            },
+            "properties": {
+                "id": segment_2["id"],
+                "startid": start_point["id"],
+                "endid": second_id,
+                "frame": "map"
+            }
+        }
+
+        features.append(feature_segment_2)
+
+        feature_segment_3 = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Segment"
+            },
+            "properties": {
+                "id": segment_3["id"],
+                "startid": second_id,
+                "endid": end_point["id"],
+                "frame": "map"
+            }
+        }
+
+        features.append(feature_segment_3)
+
+        feature_segment_4 = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Segment"
+            },
+            "properties": {
+                "id": segment_4["id"],
+                "startid": end_point["id"],
+                "endid": third_id,
+                "frame": "map"
+            }
+        }
+
+        features.append(feature_segment_4)
+        
+
 
     return features
 
@@ -78,4 +151,3 @@ print(new_features)
 # with open("output.json", "w") as outfile:
 #     json.dump(output_data, outfile, indent=2)
 
-print("Chuyển đổi hoàn tất. Dữ liệu được xuất ra file 'output.json'")
