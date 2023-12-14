@@ -1,15 +1,31 @@
-import csv
-import json
+import zipfile
+import xml.etree.ElementTree as ET
 
-def csv_to_json(csv_file_path, json_file_path):
-    # Read CSV file and convert it to a list of dictionaries
-    with open(csv_file_path, 'r') as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-        data = list(csv_reader)
+# Đường dẫn đến tệp ZIP và tên tệp XML bạn muốn chỉnh sửa
+zip_file_path = 'duong_dan_den_tep_zip.zip'
+xml_file_name = 'ten_file.xml'
 
-    # Write the list of dictionaries to a JSON file
-    with open(json_file_path, 'w') as json_file:
-        json.dump(data, json_file, indent=2)
+# Giải nén tệp ZIP
+with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+    # Đọc nội dung của tệp XML từ tệp ZIP
+    xml_content = zip_ref.read(xml_file_name)
 
-# Replace 'input.csv' and 'output.json' with your file paths
-csv_to_json('filtered_feature.csv', 'filtered_feature.json')
+    # Chuyển đổi nội dung XML thành đối tượng ElementTree
+    root = ET.fromstring(xml_content)
+
+    # Thực hiện các thay đổi cần thiết trong cây XML
+    # Ví dụ: Đổi giá trị của một phần tử
+    for element in root.iter('ElementName'):
+        element.text = 'NewValue'
+
+# Nén lại tệp ZIP với nội dung XML đã được chỉnh sửa
+with zipfile.ZipFile(zip_file_path, 'a') as zip_ref:
+    # Xóa tệp XML cũ khỏi tệp ZIP
+    zip_ref.extractall('temporary_extracted_folder')
+
+    # Ghi tệp XML mới vào tệp ZIP
+    zip_ref.write('temporary_extracted_folder/' + xml_file_name, xml_file_name)
+
+# Xóa thư mục tạm thời
+import shutil
+shutil.rmtree('temporary_extracted_folder')
