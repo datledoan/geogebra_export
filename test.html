@@ -1,23 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JSON Creator</title>
+        <title>Single applet + API</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script src="navigation.js"></script>
 </head>
+
 <body>
+<div>
+        <h1>Single applet + API</h1>
+        <p>This is an example of an HTML file containing a GeoGebra applet with buttons triggering the GeoGebra Javascript API.</p>
 
-  <script>
-    function createAndDownloadJSON() {
-      // Dữ liệu JSON mẫu
-      var jsonData = {
-        name: "John Doe",
-        age: 30,
-        city: "Example City"
-      };
+        <script src="../../../GeoGebra/deployggb.js"></script>
+        <script type="text/javascript">
 
-      // Chuyển đổi JSON thành chuỗi
-      var jsonString = JSON.stringify(jsonData, null, 2);
+                var parameters = {"prerelease":false,"width":600,"height":450,"showToolBar":false,"borderColor":null,"showMenuBar":false,"showAlgebraInput":false,
+				"showResetIcon":true,"enableLabelDrags":false,"enableShiftDragZoom":true,"enableRightClick":false,"capturingThreshold":null,"showToolBarHelp":false,
+				"errorDialogsActive":true,"useBrowserForJS":false,
+				"filename":"../ggb/geogebra-export.ggb"};
+                
+                var api1;
+
+                function listener(xapi1){
+                    var xmlString = xapi1.getXML(); // Đoạn mã XML từ xapi1.getXML()
+      var parser = new DOMParser();
+      var xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+      var features = [];
+
+      // Lọc các phần tử có tag là "element" và có type là "point" trong tag "construction"
+      var pointElements = xmlDoc.querySelectorAll('construction > element[type="point"]');
+      var segmentElements = xmlDoc.querySelectorAll('construction > command[name="Segment"]');
+      console.log(segmentElements);
+      // Lặp qua từng phần tử và tạo đối tượng JSON tương ứng
+      pointElements.forEach(function(pointElement, index) {
+        var label = pointElement.getAttribute("label");
+        var coords = pointElement.querySelector("coords");
+        var coor_x = parseFloat(coords.getAttribute("x"));
+        var coor_y = parseFloat(coords.getAttribute("y"));
+
+        // Tạo đối tượng JSON
+        var feature = {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [coor_x, coor_y]
+          },
+          properties: {
+            id: index,
+            frame: "map"
+          }
+        };
+
+        // Thêm đối tượng JSON vào mảng
+        features.push(feature);
+      });
+
+      // Chuyển mảng JSON thành chuỗi JSON
+      var jsonString = JSON.stringify(features, null, 2);
 
       // Tạo một đối tượng Blob chứa dữ liệu JSON
       var blob = new Blob([jsonString], { type: "application/json" });
@@ -28,7 +69,7 @@
       // Tạo một thẻ a để tạo liên kết tải xuống
       var a = document.createElement("a");
       a.href = url;
-      a.download = "example.json";
+      a.download = "points.json";
 
       // Thêm thẻ a vào body
       document.body.appendChild(a);
@@ -38,11 +79,26 @@
 
       // Xóa thẻ a sau khi đã tải xuống
       document.body.removeChild(a);
-    }
-  </script>
+                }
 
-  <!-- Nút để gọi hàm tạo và tải JSON -->
-  <button onclick="createAndDownloadJSON()">Tạo và Tải JSON</button>
+                parameters.appletOnLoad = function(api) {
+                        console.log("appletOnLoad");
+                        api1 = api;
+                }
+                var applet = new GGBApplet('5.0', parameters);
+              
+                //when used with Math Apps Bundle, uncomment this:
+                applet.setHTML5Codebase("../../../GeoGebra/HTML5/5.0/web3d");
 
+                window.onload = function() {
+                        applet.inject('applet_container');
+                        }
+        </script>
+
+        <div id="applet_container"></div>
+
+        <button onclick="listener(api1)">Get XML</button>
+</div>
 </body>
+
 </html>
