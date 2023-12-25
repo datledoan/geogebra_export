@@ -1,17 +1,60 @@
+
 // Tạo một đối tượng document
-var xmlDoc = document.implementation.createDocument(null, "rootElement");
+var xmlDoc = document.implementation.createDocument(null, "root");
 
-// Tạo các phần tử và thuộc tính
-var element = xmlDoc.createElement("exampleElement");
-element.setAttribute("attribute1", "value1");
-element.setAttribute("attribute2", "value2");
+// Tạo phần tử <element>
+var elementNode = xmlDoc.createElement("element");
+elementNode.setAttribute("type", "image");
+elementNode.setAttribute("label", "pic1");
 
-var subElement = xmlDoc.createElement("subElement");
-subElement.textContent = "Content of subElement";
+// Tạo và thêm các phần tử con
+var fileNode = xmlDoc.createElement("file");
+fileNode.setAttribute("name", "map_image.png");
+elementNode.appendChild(fileNode);
 
-// Gắn các phần tử vào cây DOM
-element.appendChild(subElement);
-xmlDoc.documentElement.appendChild(element);
+var inBackgroundNode = xmlDoc.createElement("inBackground");
+inBackgroundNode.setAttribute("val", "true");
+elementNode.appendChild(inBackgroundNode);
+
+var startPolntNode = xmlDoc.createElement("startPolnt");
+startPolntNode.setAttribute("number", "0");
+startPolntNode.setAttribute("exp", "A");
+elementNode.appendChild(startPolntNode);
+
+var startPointNode = xmlDoc.createElement("startPoint");
+startPointNode.setAttribute("number", "1");
+startPointNode.setAttribute("exp", "B");
+elementNode.appendChild(startPointNode);
+
+var showNode = xmlDoc.createElement("show");
+showNode.setAttribute("object", "true");
+showNode.setAttribute("label", "true");
+elementNode.appendChild(showNode);
+
+var objColorNode = xmlDoc.createElement("objColor");
+objColorNode.setAttribute("r", "0");
+objColorNode.setAttribute("g", "0");
+objColorNode.setAttribute("b", "0");
+objColorNode.setAttribute("alpha", "1");
+elementNode.appendChild(objColorNode);
+
+var layerNode = xmlDoc.createElement("layer");
+layerNode.setAttribute("val", "0");
+elementNode.appendChild(layerNode);
+
+var labelModeNode = xmlDoc.createElement("labelMode");
+labelModeNode.setAttribute("val", "0");
+elementNode.appendChild(labelModeNode);
+
+var animationNode = xmlDoc.createElement("animation");
+animationNode.setAttribute("step", "1");
+animationNode.setAttribute("speed", "1");
+animationNode.setAttribute("type", "0");
+animationNode.setAttribute("playing", "false");
+elementNode.appendChild(animationNode);
+
+// Thêm phần tử <element> vào cây DOM
+xmlDoc.documentElement.appendChild(elementNode);
 
 // Chuyển đổi cây DOM thành chuỗi XML
 var xmlString = new XMLSerializer().serializeToString(xmlDoc);
