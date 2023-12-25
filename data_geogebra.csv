@@ -1,6 +1,7 @@
 
 // Tạo một đối tượng document
-var xmlDoc = document.implementation.createDocument(null, "root");
+// Tạo một đối tượng document
+var xmlDoc = document.implementation.createDocument(null, null, null);
 
 // Tạo phần tử <element>
 var elementNode = xmlDoc.createElement("element");
@@ -54,7 +55,7 @@ animationNode.setAttribute("playing", "false");
 elementNode.appendChild(animationNode);
 
 // Thêm phần tử <element> vào cây DOM
-xmlDoc.documentElement.appendChild(elementNode);
+xmlDoc.appendChild(elementNode);
 
 // Chuyển đổi cây DOM thành chuỗi XML
 var xmlString = new XMLSerializer().serializeToString(xmlDoc);
