@@ -1,63 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Example</title>
+</head>
+<body>
 
-// Tạo một đối tượng document
-// Tạo một đối tượng document
-var xmlDoc = document.implementation.createDocument(null, null, null);
+  <!-- Ô nhập dữ liệu -->
+  <input type="text" id="inputField" placeholder="Nhập chuỗi và nhấn Enter">
 
-// Tạo phần tử <element>
-var elementNode = xmlDoc.createElement("element");
-elementNode.setAttribute("type", "image");
-elementNode.setAttribute("label", "pic1");
+  <script>
+    // Khai báo biến để lưu giá trị
+    var inputValue = "";
 
-// Tạo và thêm các phần tử con
-var fileNode = xmlDoc.createElement("file");
-fileNode.setAttribute("name", "map_image.png");
-elementNode.appendChild(fileNode);
+    // Lấy thẻ input
+    var inputField = document.getElementById("inputField");
 
-var inBackgroundNode = xmlDoc.createElement("inBackground");
-inBackgroundNode.setAttribute("val", "true");
-elementNode.appendChild(inBackgroundNode);
+    // Thêm sự kiện khi người dùng nhấn Enter
+    inputField.addEventListener("keyup", function(event) {
+      // Kiểm tra nếu phím nhấn là Enter
+      if (event.key === "Enter") {
+        // Cập nhật giá trị biến và hiển thị
+        inputValue = inputField.value;
+        console.log("Giá trị đã nhập:", inputValue);
+      }
+    });
 
-var startPolntNode = xmlDoc.createElement("startPolnt");
-startPolntNode.setAttribute("number", "0");
-startPolntNode.setAttribute("exp", "A");
-elementNode.appendChild(startPolntNode);
+    // Thêm sự kiện khi người dùng click ra ngoài ô nhập
+    document.addEventListener("click", function(event) {
+      // Kiểm tra nếu click không phải là vào ô nhập
+      if (event.target !== inputField) {
+        // Cập nhật giá trị biến và hiển thị
+        inputValue = inputField.value;
+        console.log("Giá trị đã nhập:", inputValue);
+      }
+    });
+  </script>
 
-var startPointNode = xmlDoc.createElement("startPoint");
-startPointNode.setAttribute("number", "1");
-startPointNode.setAttribute("exp", "B");
-elementNode.appendChild(startPointNode);
+</body>
+</html>
 
-var showNode = xmlDoc.createElement("show");
-showNode.setAttribute("object", "true");
-showNode.setAttribute("label", "true");
-elementNode.appendChild(showNode);
-
-var objColorNode = xmlDoc.createElement("objColor");
-objColorNode.setAttribute("r", "0");
-objColorNode.setAttribute("g", "0");
-objColorNode.setAttribute("b", "0");
-objColorNode.setAttribute("alpha", "1");
-elementNode.appendChild(objColorNode);
-
-var layerNode = xmlDoc.createElement("layer");
-layerNode.setAttribute("val", "0");
-elementNode.appendChild(layerNode);
-
-var labelModeNode = xmlDoc.createElement("labelMode");
-labelModeNode.setAttribute("val", "0");
-elementNode.appendChild(labelModeNode);
-
-var animationNode = xmlDoc.createElement("animation");
-animationNode.setAttribute("step", "1");
-animationNode.setAttribute("speed", "1");
-animationNode.setAttribute("type", "0");
-animationNode.setAttribute("playing", "false");
-elementNode.appendChild(animationNode);
-
-// Thêm phần tử <element> vào cây DOM
-xmlDoc.appendChild(elementNode);
-
-// Chuyển đổi cây DOM thành chuỗi XML
-var xmlString = new XMLSerializer().serializeToString(xmlDoc);
-
-console.log(xmlString);
